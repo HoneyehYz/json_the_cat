@@ -1,33 +1,40 @@
 const request = require('request');
 var http = require('http');
 var fs = require('fs');
-var myBreed = process.argv.slice(2);
 
-  request(`https://api.thecatapi.com/v1/breeds/search?q=${myBreed}`, (error, response, body) => {
+
+
+const fetchBreedDescription = function(breedName, callback) {
+  request(`https://api.thecatapi.com/v1/breeds/search?q=${breedName}`, (error, response, body) => {
     if( body === "[]") {
       let errorMsg = "Enter a valid Breed name";
       console.log(errorMsg);
       return errorMsg;
     }
-    if(error) {
-      console.log("This is the detail of error:\n")
-      throw (err);
-      //console.log('error:', error);
-    }
+    // if(error) {
+    //   console.log("This is the detail of error:\n")
+    //   throw (err);
+    //   //console.log('error:', error);
+    // }
   // Print the error if one occurred
   console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
   console.log('body:', body); // Print the HTML for the Google homepage.
   //fs.writeFile('./Cat.txt', body);
-  console.log(typeof body);
+  //console.log(typeof body);
   console.log("*****************************************");
   const data = JSON.parse(body);
-  console.log(data);
-  console.log(typeof data);
-  console.log("*****************************************");
-  console.log(data[0]);
-  
+
+  callback(error, data);
 });
 
+
+
+
+
+};
+
+  
+module.exports = { fetchBreedDescription };
 
 
 
